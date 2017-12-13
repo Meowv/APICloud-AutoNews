@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>main</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .header {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        .header a {
+            display: block;
+            padding: 20px;
+        }
+
+        .title {
+            line-height: 40px;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+            text-align: center;
+        }
+
+        .header .menu {
+            background-size: 30px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url("../image/menu.png");
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <a class="menu" tapmode onclick="openSlid()"></a>
+            <div class="title"></div>
+            <a></a>
+        </div>
+    </header>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script>
+        // 公共变量
+        var headerH = $api.offset($api.dom('.header')).h,
+            footerH = 50,
+            winWidth,
+            winHeight,
+            selectedIndex = 0;
+
+        // NVTabBar模块
+        var NVTabBar;
+
+        apiready = function() {
+            init();
+        };
+
+        // init.
+        function init() {
+            // 适配ios状态栏
+            $api.fixStatusBar($api.dom('.header'));
+            // 监听返回键
+            api.addEventListener({
+                name: 'keyback'
+            }, function(ret, err) {
+                api.closeWidget();
+            });
+
+            // 窗口宽高
+            winWidth = api.winWidth;
+            winHeight = api.winHeight;
+
+            // 导入底部导航模块
+            NVTabBar = api.require('NVTabBar');
+            openTabBar();
+        }
+
+        // 打开侧边栏
+        function openSlid() {
+            api.openSlidPane({
+                type: 'left'
+            });
+        }
+
+        // 关闭 frame
+        function closeFrame(name) {
+            api.closeFrame({
+                name: name
+            });
+        }
+
+        function openTabBar() {
+            NVTabBar.open({
+                styles: {
+                    bg: '#fff',
+                    h: footerH,
+                    dividingLine: {
+                        width: 0.5,
+                        color: '#f2f2f2'
+                    }
+                },
+                items: [{
+                    w: winWidth / 3.0,
+                    bg: {
+                        marginB: 0,
+                        image: 'rgba(0,0,0,0)'
+                    },
+                    iconRect: {
+                        w: 25.0,
+                        h: 25.0,
+                    },
+                    icon: {
+                        normal: 'widget://image/news.png',
+                        highlight: 'widget://image/news_active.png',
+                        selected: 'widget://image/news_active.png'
+                    },
+                    title: {
+                        text: 'News',
+                        size: 12.0,
+                        normal: '#696969',
+                        selected: '#000',
+                        marginB: 6.0
+                    }
+                }, {
+                    w: winWidth / 3.0,
+                    bg: {
+                        marginB: 0,
+                        image: 'rgba(0,0,0,0)'
+                    },
+                    iconRect: {
+                        w: 25.0,
+                        h: 25.0,
+                    },
+                    icon: {
+                        normal: 'widget://image/b2b.png',
+                        highlight: 'widget://image/b2b_active.png',
+                        selected: 'widget://image/b2b_active.png'
+                    },
+                    title: {
+                        text: 'B2B',
+                        size: 12.0,
+                        normal: '#696969',
+                        selected: '#000',
+                        marginB: 6.0
+                    }
+                }, {
+                    w: winWidth / 3.0,
+                    bg: {
+                        marginB: 0,
+                        image: 'rgba(0,0,0,0)'
+                    },
+                    iconRect: {
+                        w: 25.0,
+                        h: 25.0,
+                    },
+                    icon: {
+                        normal: 'widget://image/mine.png',
+                        highlight: 'widget://image/mine_active.png',
+                        selected: 'widget://image/mine_active.png'
+                    },
+                    title: {
+                        text: 'Mine',
+                        size: 12.0,
+                        normal: '#696969',
+                        selected: '#000',
+                        marginB: 6.0
+                    }
+                }],
+                selectedIndex: selectedIndex
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.eventType == "show") {
+                        openFrame(selectedIndex);
+                    } else {
+                        openFrame(ret.index);
+                    }
+                }
+            });
+
+            NVTabBar.bringToFront();
+        }
+
+        // 通过导航索引打开页面
+        function openFrame(index) {
+            var name;
+
+            if (index == 0) {
+                name = "news";
+                closeFrame('b2b');
+                closeFrame('mine');
+            } else if (index == 1) {
+                name = "b2b";
+                closeFrame('mine');
+                closeFrame('news');
+            } else {
+                name = "mine";
+                closeFrame('b2b');
+                closeFrame('news');
+            }
+
+            api.openFrame({
+                name: name,
+                url: name + '.html',
+                rect: {
+                    x: 0,
+                    y: headerH + 20,
+                    w: 'auto',
+                    h: winHeight - (headerH + 20) - footerH
+                },
+                bounces: true,
+                bgColor: 'rgba(0,0,0,0)',
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false,
+                scrollToTop:true
+            });
+        }
+    </script>
+</body>
+
+</html>
