@@ -278,7 +278,7 @@
 </head>
 
 <body>
-    <section id="swipe" class="swipe " tapmode onclick="openDetailByFocusImg();">
+    <section id="swipe" class="swipe" tapmode onclick="openDetailByFocusImg()">
         <div class="swipe-wrap">
         </div>
         <ul id="swipeIndicator" class="ulyq">
@@ -330,8 +330,8 @@
 <script type="text/template" id=tmp_focusSmallImg>
     {{~it:value:index}}
     <li>
-        <a data-article-id="{{=value.ArticleId}}" data-article-title="{{=value.Title}}" data-article-logo="{{=value.Logo}}">
-            <div><img src="{{=value.Logo}}" width="100%" /></div>
+        <a tapmode onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
+            <div><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}" width="100%" /></div>
             <p>{{=value.Title}}</p>
         </a>
     </li>
@@ -340,12 +340,12 @@
 <script type="text/template" id=tmp_newsList>
     {{~it:value:index}}
     <li>
-        <a data-article-id="{{=value.ArticleId}}" data-article-title="{{=value.Title}}" data-article-logo="{{=value.Logo}}">
+        <a tapmode onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
             <dl>
-                <dt><img src="{{=value.Logo}}" /></dt>
+                <dt><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}" /></dt>
                 <dd>
                     {{=value.Title}}
-                    <p><span>{{=value.IssueTime}}</span></p>
+                    <p><span style="color:{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
                 </dd>
             </dl>
         </a>
@@ -354,19 +354,21 @@
 </script>
 <script type="text/template" id=tmp_dataCenter>
     {{~it:value:index}}
-    <p><span class="center_{{=value.Index}}">{{=value.Index}}</span>{{=value.Title}}</p>
+    <p tapmode onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
+        <span class="center_{{=value.Index}}">{{=value.Index}}</span>{{=value.Title}}
+    </p>
     {{~}}
 </script>
 <script src="../script/api.js"></script>
 <script src="../script/swipe.js"></script>
 <script src="../script/doT.min.js"></script>
 <script>
-    var swipe = $api.byId('swipe');
-
     // Init
     apiready = function() {
         // 解锁侧滑
         api.unlockSlidPane();
+        // loading
+        // showToast(msg = 'loading...', duration = 1000);
         // 焦点大图
         getBigFocus();
         // 焦点两小图
@@ -411,7 +413,7 @@
         var indicators = $api.domAll(indicator, 'a');
         var titles = $api.domAll(title, 'li');
 
-        window._swipe = new Swipe(swipe, {
+        window._swipe = new Swipe($api.byId('swipe'), {
             auto: 5000,
             continuous: true,
             stopPropagation: false,
@@ -472,6 +474,14 @@
         });
     }
 
+    function showToast() {
+        api.toast({
+            msg: '网络错误',
+            duration: 4000,
+            location: 'bottom'
+        });
+    }
+
     function getBigFocus() {
         api.ajax({
             url: 'https://api.gasgoo.com/api/autonews/get_article_focus_big',
@@ -493,9 +503,10 @@
 
             } else {
                 // 异常处理
+                showToast();
             }
-
         });
+
     }
 
     function getSmallFocus() {
@@ -511,6 +522,7 @@
                 $api.html($api.dom('.sales ul'), tmp_focusSmallImg(ret));
             } else {
                 // 异常处理
+                showToast();
             }
         });
     }
@@ -528,6 +540,7 @@
                 $api.html($api.dom('.china-news'), tmp_chinaNews(ret));
             } else {
                 // 异常处理
+                showToast();
             }
         });
 
@@ -546,6 +559,7 @@
                 $api.html($api.dom('.new-energy'), tmp_newEnergy(ret));
             } else {
                 // 异常处理
+                showToast();
             }
         });
     }
@@ -563,6 +577,7 @@
                 $api.html($api.dom('.center'), tmp_dataCenter(ret));
             } else {
                 // 异常处理
+                showToast();
             }
         });
 
