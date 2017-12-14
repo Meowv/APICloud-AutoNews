@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 e36132ff018c6821bf92482c6bac8ce1fc9cdbe3 阿星Plus <hackxing@foxmail.com> 1513130010 +0800	clone: from https://github.com/Meowv/APIClode-AutoNews.git
+e36132ff018c6821bf92482c6bac8ce1fc9cdbe3 582224bdd5b80e885123848ae092c986e863e8da 阿星Plus <hackxing@foxmail.com> 1513130131 +0800	commit: 根据官方demo自制底部导航和侧边导航框架模板
+582224bdd5b80e885123848ae092c986e863e8da e4a12d3c3c1c6fa7d9a8e4e7b7522d3169a66fe7 阿星Plus <hackxing@foxmail.com> 1513173952 +0800	commit: 底部导航换用原生模块NVTabBar实现 实现android和ios双平台侧滑及底部导航切换功能的框架开发模板.
