@@ -39,7 +39,6 @@ input, button, textarea {
     padding: 0;
     font-size: 1em;
     line-height: 1em;
-    /*-webkit-appearance:none;*/
     background-color: rgba(0, 0, 0, 0);
 }
 
@@ -67,17 +66,4 @@ table {
 
 td, th {
     padding: 0;
-}
-
-.clearfix:after {
-    content: ' ';
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
-}
-
-.hover {
-    color: #3ABA63;
 }

@@ -12,6 +12,10 @@
             background-color: #fff;
         }
 
+        .header {
+            height: 44px;
+        }
+
         .header .searchtop {
             background: #fff;
             position: fixed;
@@ -45,7 +49,7 @@
         }
 
         .header .search a {
-            background: url(../image/menuTU.png) no-repeat center;
+            background: url(../image/menu.png) no-repeat center;
             background-size: 18px;
             width: 30px;
             height: 30px;
@@ -89,30 +93,10 @@
 
         .header .searchMagnifier {
             width: 55px;
-            background: url(../image/searchTU.png) no-repeat center;
+            background: url(../image/search.png) no-repeat center;
             background-size: 16px;
             margin-top: 5px;
         }
-        /*.header a {
-            display: block;
-            padding: 20px;
-        }
-
-        .title {
-            line-height: 40px;
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-            flex: 1;
-            text-align: center;
-        }
-
-        .header .menu {
-            background-size: 30px;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-image: url("../image/menu.png");
-        }*/
-
         .hide {
             display: none;
         }
@@ -122,9 +106,6 @@
 <body>
     <header id="header">
         <div class="header news">
-            <!-- <a class="menu" tapmode onclick="openSlid()"></a>
-            <div class="title" onclick="openSeachBar('news')">news</div>
-            <a></a> -->
             <ul>
                 <li class="search" tapmode onclick="openSlid()">
                     <a></a>
@@ -236,7 +217,7 @@
                         text: 'News',
                         size: 12.0,
                         normal: '#696969',
-                        selected: '#000',
+                        selected: '#00568F',
                         marginB: 6.0
                     }
                 }, {
@@ -258,7 +239,7 @@
                         text: 'B2B',
                         size: 12.0,
                         normal: '#696969',
-                        selected: '#000',
+                        selected: '#00568F',
                         marginB: 6.0
                     }
                 }, {
@@ -280,7 +261,7 @@
                         text: 'Mine',
                         size: 12.0,
                         normal: '#696969',
-                        selected: '#000',
+                        selected: '#00568F',
                         marginB: 6.0
                     }
                 }],

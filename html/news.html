@@ -330,7 +330,7 @@
 <script type="text/template" id=tmp_focusSmallImg>
     {{~it:value:index}}
     <li>
-        <a tapmode="hover" onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
+        <a onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
             <div><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}" width="100%" /></div>
             <p>{{=value.Title}}</p>
         </a>
@@ -340,7 +340,7 @@
 <script type="text/template" id=tmp_newsList>
     {{~it:value:index}}
     <li>
-        <a tapmode="hover" onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
+        <a onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
             <dl>
                 <dt><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}" /></dt>
                 <dd>
@@ -354,7 +354,7 @@
 </script>
 <script type="text/template" id=tmp_dataCenter>
     {{~it:value:index}}
-    <p tapmode="hover" onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
+    <p onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
         <span class="center_{{=value.Index}}">{{=value.Index}}</span>{{=value.Title}}
     </p>
     {{~}}
@@ -367,8 +367,6 @@
     apiready = function() {
         // 解锁侧滑
         api.unlockSlidPane();
-        // loading
-        // showToast(msg = 'loading...', duration = 1000);
         // 焦点大图
         getBigFocus();
         // 焦点两小图
@@ -490,7 +488,7 @@
 
     function showToast() {
         api.toast({
-            msg: '网络错误',
+            msg: 'Error',
             duration: 4000,
             location: 'bottom'
         });

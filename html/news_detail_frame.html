@@ -99,7 +99,7 @@
             modal: false
         });
         api.ajax({
-            url: 'http://192.168.40.111:89/api/autonews/get_article/' + articleId,
+            url: 'https://api.gasgoo.com/api/autonews/get_article/' + articleId,
             cache: true,
             method: 'get'
         }, function(ret, err) {
@@ -116,24 +116,6 @@
             }
             // 关闭加载
             api.hideProgress();
-        });
-    }
-
-    function wxShare(scene) {
-        var wx = api.require("wx");
-        wx.shareWebpage({
-            apiKey: '',
-            scene: scene,
-            title: title,
-            description: description,
-            thumb: logo,
-            contentUrl: 'http://autonews.gasgoo.com/m/detail/' + articleId + '.html'
-        }, function(ret, err) {
-            if (ret.status) {
-                // alert('分享成功');
-            } else {
-                // alert(err.code);
-            }
         });
     }
 </script>
