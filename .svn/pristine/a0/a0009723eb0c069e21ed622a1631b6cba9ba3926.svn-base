@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>b2b</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div style="background-color:yellow; width:100%;height:1000px;">b2b</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script>
+apiready=function(){
+  api.lockSlidPane();
+}
+</script>
+</html>
