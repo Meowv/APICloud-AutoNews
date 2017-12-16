@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>news_list_frame</title>
+    <title>news_search_list_frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
         section.list {
@@ -81,16 +81,40 @@
             line-height: 15px;
             color: #b4b4b4;
         }
+
+        .find {
+            padding: 0.8em 0.5em;
+            font-size: 14px;
+        }
+
+        .find b {
+            margin-right: 10px;
+        }
+
+        .find span {
+            color: #ff0000;
+        }
+
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
     <section class="list">
+        <p id="noret" class="find hide">Sorry, there is no information about <span class="keyword"> "asdsad"</span>.</p>
+        <p id="ret" class="find">
+            <b></b> Find
+            <span id="total"></span> Results for
+            <span id="keyword"></span>
+        </p>
         <ul></ul>
     </section>
     <section class="loading_more">
         <div><i id="loadImg"></i><span id="pushStatus">loading...</span></div>
     </section>
+
 </body>
 <script type="text/template" id="tmp_list">
     {{~it:value:index}}
@@ -114,12 +138,17 @@
 <script src="../script/doT.min.js"></script>
 <script>
     var page = 1,
+        keyword,
         isMore = true,
-        refresh = true;
+        refresh = true,
+        total = 0;
 
     apiready = function() {
-        // 下拉刷新列表
-        refreshPage();
+        keyword = api.pageParam.keyword;
+        $api.text($api.dom('.find b'), keyword);
+        $api.text($api.dom('.list p span.keyword'), '"' + keyword + '"');
+        $api.text($api.byId('keyword'), '"' + keyword + '"');
+
         // 加载列表
         getList();
         // 上拉加载列表
@@ -138,14 +167,19 @@
         }
         if (isMore) {
             api.ajax({
-                url: 'https://api.gasgoo.com/api/autonews/get_article_list/' + api.pageParam.classId + "/" + page,
+                url: 'https://api.gasgoo.com/api/autonews/get_article_searchlist/' + encodeURI(api.pageParam.keyword) + "/" + page,
                 cache: true,
-                method: 'get',
+                method: 'get'
             }, function(ret, err) {
                 if (ret) {
+                    $api.text($api.byId('total'), ret.Total);
+                    if (ret.Total == 0) {
+                        $api.addCls($api.byId('ret'), 'hide');
+                        $api.removeCls($api.byId('noret'), 'hide');
+                    }
                     var list = $api.dom('.list ul');
                     var tmp_list = doT.template($api.byId('tmp_list').innerHTML);
-                    var result = tmp_list(ret);
+                    var result = tmp_list(ret.List);
                     if (page != 1) {
                         $api.append(list, result);
                     } else {
@@ -153,7 +187,7 @@
                     }
                     page++;
                     refresh = false;
-                    if (ret.length < 10) {
+                    if (ret.Total < 10) {
                         var status = $api.byId('pushStatus');
                         status.innerHTML = "No more";
                         $api.css($api.byId('loadImg'), 'display:none');
@@ -169,26 +203,9 @@
                         location: 'bottom'
                     });
                 }
+
             });
         }
-    }
-
-    function refreshPage() {
-        // 监听页面下拉刷新事件
-        api.setRefreshHeaderInfo({
-            visible: true,
-            loadingImg: 'widget://image/refresh.png',
-            bgColor: '#f0f0f0',
-            textColor: '#888',
-            textDown: 'Pull-down refresh...',
-            textUp: 'Loosen the refresh...',
-            textLoading: 'loading...',
-            showTime: false
-        }, function(ret, err) {
-            page = 1;
-            isMore = true;
-            getList();
-        });
     }
 
     function loadingMore() {
@@ -201,7 +218,6 @@
         }, function(ret, err) {
             getList();
         });
-
     }
 
     // 缓存图片
@@ -221,10 +237,6 @@
         }
     }
 
-    function onErrorHandle(obj) {
-        obj.src = "../image/error.png";
-    }
-
     // 跳转详情页
     function openDetail(articleId, title, logo) {
         api.openWin({
@@ -239,6 +251,10 @@
                 type: "fade"
             }
         });
+    }
+
+    function onErrorHandle(obj) {
+        obj.src = "../image/error.png";
     }
 </script>
 

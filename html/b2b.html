@@ -13,12 +13,30 @@
 </head>
 
 <body>
-    <div style="background-color:yellow; width:100%;height:1000px;">b2b</div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script>
-apiready=function(){
-  api.lockSlidPane();
-}
+    apiready = function() {
+        api.lockSlidPane();
+        api.openFrame({
+            name: 'mb',
+            url: 'http://mb.gasgoo.com/',
+            rect: {
+                x: 0,
+                y: 20,
+                w: 'auto',
+                h: api.winHeight - 70
+            },
+            bounces: false,
+            bgColor: 'rgba(0,0,0,0)',
+            useWKWebView: true,
+            historyGestureEnabled: true,
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false
+        });
+
+        
+    }
 </script>
+
 </html>

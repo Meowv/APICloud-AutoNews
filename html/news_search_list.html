@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>news_search_list</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        .header {
+            position: relative;
+            width: 100%;
+            height: 44px;
+            background-color: ##fefdfd;
+            text-align: center;
+            border-bottom: #f5f5f6 .07rem solid;
+        }
+
+        .header .refh {
+            position: absolute;
+            box-sizing: border-box;
+            bottom: 0;
+            left: 4%;
+            width: 22px;
+            height: 44px;
+            color: #333333;
+            font-size: 16px;
+            line-height: 44px;
+            background: url(../image/return.png) 0px 12px no-repeat;
+            background-size: 11px 19px;
+            z-index: 2;
+        }
+
+        .header .title {
+            position: relative;
+            box-sizing: border-box;
+            width: 100%;
+            height: 44px;
+            color: #333333;
+            font-size: 19px;
+            font-weight: bold;
+            line-height: 44px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="refh" tapmode="hover" onclick="closeWin()"></div>
+        <div class="title" id="title">Search</div>
+    </header>
+</body>
+<script src="../script/api.js"></script>
+<script>
+    var headerH,
+        winHeight,
+        keyword;
+
+    apiready = function() {
+        init();
+        openListFrame(keyword);
+    }
+
+    function init() {
+        var header = $api.byId('header');
+        headerH = $api.offset(header).h;
+        winHeight = api.winHeight;
+        var systemType = api.systemType;
+
+        $api.fixStatusBar(header);
+        if (systemType == "ios") {
+            headerH += 20;
+        } else {
+            headerH += 26;
+        }
+
+        keyword = api.pageParam.keyword;
+    }
+
+    function openListFrame(classId) {
+        api.openFrame({
+            name: 'news_search_list_frame',
+            url: './news_search_list_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: winHeight - headerH
+            },
+            pageParam: {
+                keyword: keyword,
+            },
+            bounces: true
+        });
+    }
+
+    // 关闭当前窗口
+    function closeWin() {
+        api.closeWin();
+    }
+</script>
+
+</html>

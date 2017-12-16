@@ -97,6 +97,7 @@
             background-size: 16px;
             margin-top: 5px;
         }
+
         .hide {
             display: none;
         }
@@ -119,23 +120,22 @@
             </ul>
         </div>
         <div class="header b2b">
-            <ul>
+            <!-- <ul>
                 <li class="searchKuan" style="margin-left:20px;" onclick="openSeachBar('b2b')">
                     <div class="inputSear"><a> search</a></div>
                 </li>
                 <li class="searchMagnifier" onclick="openSeachBar('b2b')">
                     <a></a>
                 </li>
-            </ul>
+            </ul> -->
         </div>
-        <div class="header mine">
-            <div class="title">mine</div>
-        </div>
+        <div class="header mine"></div>
     </header>
+    <section class="canopy"></section>
     <script src="../script/api.js"></script>
     <script>
         // 公共变量
-        var headerH = $api.offset($api.dom($api.byId('header'), '.header')).h + 25,
+        var headerH,
             footerH = 50,
             winWidth,
             winHeight,
@@ -152,13 +152,29 @@
 
         // init.
         function init() {
+            headerH = $api.offset($api.dom($api.byId('header'), '.header')).h + 25;
+
             $api.fixStatusBar($api.byId('header'));
 
             // 监听返回键
+            // api.addEventListener({
+            //     name: 'keyback'
+            // }, function(ret, err) {
+            //     api.closeWidget(); //关闭App
+            // });
+
             api.addEventListener({
                 name: 'keyback'
             }, function(ret, err) {
-                api.closeWidget(); //关闭App
+                var js = 'api.historyBack(function(ret, err){if(ret.status){}else{api.closeWidget();}});';
+                api.execScript({
+                    frameName: 'mb',
+                    script: js
+                });
+                api.execScript({
+                    frameName: 'news',
+                    script: js
+                });
             });
 
             // 窗口宽高
@@ -281,29 +297,38 @@
 
         // 通过导航索引打开页面
         function openFrame(index) {
-            var name;
+            var name,
+                _headerH;
 
             if (index == 0) {
                 name = "news";
                 closeFrame('b2b');
+                closeFrame('mb');
                 closeFrame('mine');
                 $api.removeCls($api.dom('.news'), 'hide');
                 $api.addCls($api.dom('.b2b'), 'hide');
                 $api.addCls($api.dom('.mine'), 'hide');
             } else if (index == 1) {
                 name = "b2b";
-                closeFrame('mine');
                 closeFrame('news');
+                closeFrame('mine');
                 $api.removeCls($api.dom('.b2b'), 'hide');
                 $api.addCls($api.dom('.mine'), 'hide');
                 $api.addCls($api.dom('.news'), 'hide');
             } else {
                 name = "mine";
-                closeFrame('b2b');
                 closeFrame('news');
+                closeFrame('b2b');
+                closeFrame('mb');
                 $api.removeCls($api.dom('.mine'), 'hide');
                 $api.addCls($api.dom('.b2b'), 'hide');
                 $api.addCls($api.dom('.news'), 'hide');
+            }
+
+            if (index == 2) {
+                _headerH = 0;
+            } else {
+                _headerH = headerH;
             }
 
             api.openFrame({
@@ -311,16 +336,16 @@
                 url: name + '.html',
                 rect: {
                     x: 0,
-                    y: headerH,
+                    y: _headerH,
                     w: 'auto',
-                    h: winHeight - headerH - footerH
+                    h: winHeight - _headerH - footerH
                 },
                 bounces: true,
                 bgColor: 'rgba(0,0,0,0)',
                 vScrollBarEnabled: false,
                 hScrollBarEnabled: false,
                 scrollToTop: true,
-                reload: false
+                reload: true
             });
         }
 
@@ -343,7 +368,7 @@
                 },
                 styles: {
                     navBar: {
-                        bgColor: '#FFFFFF',
+                        bgColor: '#edf1f4',
                         borderColor: '#ccc'
                     },
                     searchBox: {
@@ -353,7 +378,7 @@
                     },
                     cancel: {
                         bg: 'rgba(0,0,0,0)',
-                        color: '#D2691E',
+                        color: '#00568F',
                         size: 16
                     },
                     list: {
@@ -370,11 +395,31 @@
                 }
             }, function(ret, err) {
                 if (ret) {
+                    var keyword = ret.text;
+                    var searchPage;
                     if (flag == "news") {
-                        alert("news" + JSON.stringify(ret))
+                        searchPage = 'news_search_list';
+                        openList(keyword, searchPage);
                     } else {
-                        alert("b2b" + JSON.stringify(ret))
+                        // searchPage = 'b2b_search_list';
+                        // openList(keyword, searchPage);
+                        searchPage = 'news_search_list';
+                        openList(keyword, searchPage);
                     }
+                }
+            });
+        }
+
+        // 打开列表页
+        function openList(keyword, searchPage) {
+            api.openWin({
+                name: searchPage,
+                url: './' + searchPage + '.html',
+                pageParam: {
+                    keyword: keyword
+                },
+                animation: {
+                    trpe: 'fade'
                 }
             });
         }
