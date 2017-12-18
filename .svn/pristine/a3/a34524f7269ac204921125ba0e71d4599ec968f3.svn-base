@@ -41,22 +41,31 @@
 
         .myinfo ul li a {
             display: block;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-flex-flow: row;
+            flex-flow: row;
             color: #333;
         }
 
         .myinfo ul li a span {
-            display: block;
+            -webkit-box-flex: 4;
+            -webkit-flex: 4;
+            flex: 4;
         }
 
         .myinfo ul li a span.hair {
             background: url(../image/hair.png) no-repeat right;
             background-size: 8px;
             display: block;
-            width: 65px;
-            height: 48px;
+            width: 20px;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
             color: #999;
             font-size: 14PX;
-            float: right;
         }
 
         .myinfo ul li a.scaveng {
@@ -88,6 +97,7 @@
             -webkit-flex: 3;
             flex: 3;
         }
+
     </style>
 </head>
 
@@ -99,20 +109,20 @@
         <ul>
             <li tapmode="" onclick="ClearCache()">
                 <a class="scaveng">
-                    <span class="hair cacheSize" id="cacheSize"></span>
                     <span>Clear Cache</span>
+                    <span class="hair cacheSize" id="cacheSize"></span>
                 </a>
             </li>
             <li tapmode="" onclick="openPage(0)">
                 <a class="feedback">
-                    <span class="hair"></span>
                     <span>Send Feedback</span>
+                    <span class="hair"></span>
                 </a>
             </li>
             <li tapmode="" onclick="openPage(1)">
                 <a class="about">
-                    <span class="hair"></span>
                     <span>About us</span>
+                    <span class="hair"></span>
                 </a>
             </li>
         </ul>
@@ -121,8 +131,8 @@
         <ul>
             <li tapmode="" onclick="openPage(2)">
                 <a class="contact">
-                    <span class="hair"></span>
                     <span>Contact us</span>
+                    <span class="hair"></span>
                 </a>
             </li>
         </ul>
@@ -130,12 +140,10 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script>
-    var paneName = ['feedback', 'aboutus', 'contactus'];
+    var paneName = ['feefback', 'aboutus', 'contactus'];
 
     apiready = function() {
         api.lockSlidPane();
-
-        $api.css($api.dom('body'), 'height:' + (api.winHeight - 50) + 'px;');
 
         getCacheSize();
     }
@@ -163,10 +171,11 @@
 
     function openPage(index) {
         var page = paneName[index];
-        api.openWin({
-            name: page,
-            url: './' + page + '.html'
-        });
+        alert(page);
+        // api.openWin({
+        //     name: page,
+        //     url: './' + page + '.html'
+        // });
     }
 </script>
 

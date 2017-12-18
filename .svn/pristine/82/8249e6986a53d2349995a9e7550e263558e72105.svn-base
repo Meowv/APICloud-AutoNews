@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>feedback</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        body {
+            background-color: #eeeeee;
+        }
+
+        .header {
+            position: relative;
+            width: 100%;
+            height: 44px;
+            background-color: #fefdfd;
+            text-align: center;
+            border-bottom: #f5f5f6 .07rem solid;
+        }
+
+        .header .refh {
+            position: absolute;
+            box-sizing: border-box;
+            bottom: 0;
+            left: 4%;
+            width: 22px;
+            height: 44px;
+            color: #333333;
+            font-size: 16px;
+            line-height: 44px;
+            background: url(../image/return.png) 0px 12px no-repeat;
+            background-size: 11px 19px;
+            z-index: 2;
+        }
+
+        .header .title {
+            position: relative;
+            box-sizing: border-box;
+            width: 100%;
+            height: 44px;
+            color: #333333;
+            font-size: 19px;
+            font-weight: bold;
+            line-height: 44px;
+        }
+
+        .header .textp {
+            position: absolute;
+            bottom: 0;
+            right: 4%;
+            color: #333333;
+            line-height: 44px;
+        }
+
+        .header .textp a {
+            font-size: 16px;
+            color: #333333;
+        }
+
+        .wid92 {
+            width: 92%;
+            margin: 0 auto;
+        }
+
+        .margtop8 {
+            margin-top: 8px;
+        }
+        /*反馈建议*/
+
+        .AUTOOpinion {
+            background-color: #fff;
+            height: 200px;
+            width: 100%;
+            position: relative;
+        }
+
+        .AUTOOpinion .Opiniontext {
+            width: 100%;
+            height: 100%;
+            padding: 15px 15px 15px 33px;
+            box-sizing: border-box;
+            color: #858585;
+            font-size: 15px;
+            line-height: 23px;
+            background: url(../image/Opiniontext.png) no-repeat 15px 19px;
+            background-size: 14px;
+            display: block;
+        }
+
+        .AUTOmail {
+            background-color: #fff;
+            height: 44px;
+            position: relative;
+        }
+
+        .AUTOmail .mailtext {
+            width: 100%;
+            height: 100%;
+            padding: 5px 15px 5px 33px;
+            box-sizing: border-box;
+            color: #858585;
+            font-size: 15px;
+            line-height: 34px;
+            background: url(../image/mailtext.png) no-repeat 15px 15px;
+            background-size: 14px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="refh" tapmode onclick="closeWin()"></div>
+        <div class="title">Feedback</div>
+        <div class="textp" tapmode onclick="sendFeedback()"><a>Send</a></div>
+    </header>
+    <section class="feedback wid92 ">
+        <div class="AUTOOpinion margtop8"><textarea name="content" class="Opiniontext" id="advise" placeholder="Feedback"></textarea></div>
+        <div class="AUTOmail margtop8"><textarea name="content" class="mailtext" id="email" placeholder="Email"></textarea></div>
+    </section>
+</body>
+<script src="../script/api.js"></script>
+<script>
+    apiready = function() {
+        $api.fixStatusBar($api.byId('header'));
+        $api.css($api.dom('body'), 'height:' + (api.winHeight) + 'px;');
+        api.setStatusBarStyle({
+            style: 'dark',
+        });
+    }
+
+    function sendFeedback() {
+        var advise = $api.val($api.byId('advise'));
+        var email = $api.val($api.byId('email'));
+
+        if ($api.trim(advise) == "") {
+            api.toast({
+                msg: 'Enter your feedback',
+                location: 'middle'
+            });
+            return;
+        }
+        email = $api.trim(email);
+        if (email == "") {
+            api.toast({
+                msg: 'Enter your email',
+                location: 'middle'
+            });
+            return;
+        } else {
+            var r_email = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            if (!r_email.test(email)) {
+                api.toast({
+                    msg: 'Email error',
+                    location: 'middle'
+                });
+                return;
+            }
+        }
+        api.ajax({
+            url: 'https://api.gasgoo.com/api/autonews/add_advise',
+            method: 'post',
+            dataType: 'text',
+            headers: {
+                "Content-Type": 'application/json; charset=utf-8'
+            },
+            data: {
+                body: "{ 'advise':'" + advise + "','email':'" + email + "'}"
+            }
+        }, function(ret, err) {
+            if (ret) {
+                $api.val($api.byId('advise'), "");
+                $api.val($api.byId('email'), "");
+                api.toast({
+                    msg: 'Feedback success',
+                    location: 'middle'
+                });
+                setTimeout(function() {
+                    closeWin();
+                }, 2000);
+            } else {
+                api.toast({
+                    msg: 'Error',
+                    duration: 4000,
+                    location: 'bottom'
+                });
+            }
+        });
+
+    }
+
+    function closeWin() {
+        api.closeWin();
+    }
+</script>
+
+</html>

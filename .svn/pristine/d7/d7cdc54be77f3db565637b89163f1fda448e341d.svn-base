@@ -8,9 +8,19 @@
     <title>main</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
-        .header {
+        header {
             background-color: #fff;
+        }
+
+        .header {
             height: 44px;
+        }
+
+        .header .searchtop {
+            background: #fff;
+            position: fixed;
+            z-index: 10;
+            width: 100%;
         }
 
         .header ul {
@@ -147,6 +157,12 @@
             $api.fixStatusBar($api.byId('header'));
 
             // 监听返回键
+            // api.addEventListener({
+            //     name: 'keyback'
+            // }, function(ret, err) {
+            //     api.closeWidget(); //关闭App
+            // });
+
             api.addEventListener({
                 name: 'keyback'
             }, function(ret, err) {
@@ -157,10 +173,6 @@
                 });
                 api.execScript({
                     frameName: 'news',
-                    script: js
-                });
-                api.execScript({
-                    frameName: 'mine',
                     script: js
                 });
             });
@@ -195,11 +207,11 @@
         function openTabBar() {
             NVTabBar.open({
                 styles: {
-                    bg: '#f2f2f2',
+                    bg: '#fff',
                     h: footerH,
                     dividingLine: {
                         width: 0.5,
-                        color: '#e2e2e2'
+                        color: '#f2f2f2'
                     }
                 },
                 items: [{
@@ -209,8 +221,8 @@
                         image: 'rgba(0,0,0,0)'
                     },
                     iconRect: {
-                        w: 27.0,
-                        h: 27.0,
+                        w: 25.0,
+                        h: 25.0,
                     },
                     icon: {
                         normal: 'widget://image/news.png',
@@ -220,9 +232,9 @@
                     title: {
                         text: 'News',
                         size: 12.0,
-                        normal: '#a4b0b9',
-                        selected: '#00568f',
-                        marginB: 3.0
+                        normal: '#696969',
+                        selected: '#00568F',
+                        marginB: 6.0
                     }
                 }, {
                     w: winWidth / 3.0,
@@ -231,8 +243,8 @@
                         image: 'rgba(0,0,0,0)'
                     },
                     iconRect: {
-                        w: 27.0,
-                        h: 27.0,
+                        w: 25.0,
+                        h: 25.0,
                     },
                     icon: {
                         normal: 'widget://image/b2b.png',
@@ -242,9 +254,9 @@
                     title: {
                         text: 'B2B',
                         size: 12.0,
-                        normal: '#a4b0b9',
-                        selected: '#00568f',
-                        marginB: 3.0
+                        normal: '#696969',
+                        selected: '#00568F',
+                        marginB: 6.0
                     }
                 }, {
                     w: winWidth / 3.0,
@@ -253,8 +265,8 @@
                         image: 'rgba(0,0,0,0)'
                     },
                     iconRect: {
-                        w: 27.0,
-                        h: 27.0,
+                        w: 25.0,
+                        h: 25.0,
                     },
                     icon: {
                         normal: 'widget://image/mine.png',
@@ -264,9 +276,9 @@
                     title: {
                         text: 'Mine',
                         size: 12.0,
-                        normal: '#a4b0b9',
-                        selected: '#00568f',
-                        marginB: 3.0
+                        normal: '#696969',
+                        selected: '#00568F',
+                        marginB: 6.0
                     }
                 }],
                 selectedIndex: selectedIndex
@@ -286,8 +298,7 @@
         // 通过导航索引打开页面
         function openFrame(index) {
             var name,
-                _headerH,
-                bounces = true;
+                _headerH;
 
             if (index == 0) {
                 name = "news";
@@ -306,7 +317,6 @@
                 $api.addCls($api.dom('.news'), 'hide');
             } else {
                 name = "mine";
-                bounces = false;
                 closeFrame('news');
                 closeFrame('b2b');
                 closeFrame('mb');
@@ -330,12 +340,12 @@
                     w: 'auto',
                     h: winHeight - _headerH - footerH
                 },
-                bounces: bounces,
+                bounces: true,
                 bgColor: 'rgba(0,0,0,0)',
                 vScrollBarEnabled: false,
                 hScrollBarEnabled: false,
                 scrollToTop: true,
-                reload: false
+                reload: true
             });
         }
 

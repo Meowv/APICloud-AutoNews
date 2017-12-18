@@ -123,7 +123,7 @@
             <dl>
                 {{?value.Logo!=""}}
                 <dt>
-                  <img onload="loadingImgCache(this)" onerror="onErrorHandle(this)" data-url="{{=value.Logo}}" src="../image/error.png"/>
+                  <img onload="loadingImgCache(this)" onerror="onErrorHandle(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}"/>
                 </dt> {{?}}
                 <dd>
                     {{=value.Title}}
@@ -137,7 +137,7 @@
 <script src="../script/api.js"></script>
 <script src="../script/doT.min.js"></script>
 <script>
-    var page = 5,
+    var page = 1,
         keyword,
         isMore = true,
         refresh = true,
@@ -167,22 +167,19 @@
         }
         if (isMore) {
             api.ajax({
-                url: 'https://api.gasgoo.com/api/autonews/v2/get_article_searchlist/' + encodeURI(api.pageParam.keyword) + "/" + page,
+                url: 'https://api.gasgoo.com/api/autonews/get_article_searchlist/' + encodeURI(api.pageParam.keyword) + "/" + page,
                 cache: true,
                 method: 'get'
             }, function(ret, err) {
                 if (ret) {
-                    var str = $api.jsonToStr(ret).replace("’", "\’").replace("'", "\’");
-                    var data = $api.strToJson(str);
-
                     $api.text($api.byId('total'), ret.Total);
-                    if (data.Total == 0) {
+                    if (ret.Total == 0) {
                         $api.addCls($api.byId('ret'), 'hide');
                         $api.removeCls($api.byId('noret'), 'hide');
                     }
                     var list = $api.dom('.list ul');
                     var tmp_list = doT.template($api.byId('tmp_list').innerHTML);
-                    var result = tmp_list(data.List);
+                    var result = tmp_list(ret.List);
                     if (page != 1) {
                         $api.append(list, result);
                     } else {
@@ -190,7 +187,7 @@
                     }
                     page++;
                     refresh = false;
-                    if (data.Total < 10) {
+                    if (ret.Total < 10) {
                         var status = $api.byId('pushStatus');
                         status.innerHTML = "No more";
                         $api.css($api.byId('loadImg'), 'display:none');

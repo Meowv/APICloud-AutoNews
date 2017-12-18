@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>news_detail_frame</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        article {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-flex-flow: column;
+            flex-flow: column;
+            background: #fff;
+            margin-bottom: 20px;
+        }
+
+        article hgroup h1 {
+            font-size: 24px;
+            padding: 15px 55px 15px 20px;
+            line-height: 33px;
+            font-weight: normal;
+            color: #333333;
+            border-left: 6px solid #fc0;
+        }
+
+        article hgroup h2 {
+            font-weight: normal;
+            padding: 0px 20px 10px 15px;
+            border-bottom: 1px dashed #e1e1e1;
+            font-size: 14px;
+            color: #7a7a7a;
+        }
+
+        article hgroup h2 span {
+            padding: 0px 10px;
+            font-size: 14px;
+        }
+
+        article hgroup h2 time {
+            font-size: 14px;
+        }
+
+        article p {
+            padding: 8px;
+            padding-bottom: 0px;
+            font-size: 15px;
+            line-height: 22px;
+            color: #333;
+        }
+
+        article p img {
+            padding: 10px 0px;
+            height: auto !important;
+            width: 100% !important;
+        }
+    </style>
+</head>
+
+<body>
+    <article id="detail"></article>
+</body>
+<script type="text/template" id="template">
+    <hgroup>
+        <h1>{{=it.Title}}</h1>
+        <h2><span>{{=it.Author}} From {{=it.SourceFrom}}</span>|  <time>{{=it.IssueTime}}</time></h2>
+    </hgroup>
+    {{=it.ArticleContent}}
+</script>
+<script src="../script/api.js"></script>
+<script src="../script/doT.min.js"></script>
+<script>
+    var articleId,
+        title,
+        logo,
+        description;
+
+    apiready = function() {
+        articleId = api.pageParam.ArticleId;
+        title = api.pageParam.Title;
+        logo = api.pageParam.Logo;
+        if (logo == 'undefined') {
+            logo = "widget://image/logo.jpg";
+        }
+        getArticle();
+    }
+
+    function getArticle() {
+        // 友好加载
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: 'Loading...',
+            text: 'Wait a moment...',
+            modal: false
+        });
+        api.ajax({
+            url: 'https://api.gasgoo.com/api/autonews/get_article/' + articleId,
+            cache: true,
+            method: 'get'
+        }, function(ret, err) {
+            if (ret) {
+                description = ret[0].BriefContent;
+                var tmp_detail = doT.template($api.byId('template').innerHTML);
+                $api.html($api.byId('detail'), tmp_detail(ret[0]));
+            } else {
+                api.toast({
+                    msg: 'Error',
+                    duration: 4000,
+                    location: 'bottom'
+                });
+            }
+            // 关闭加载
+            api.hideProgress();
+        });
+    }
+</script>
+
+</html>

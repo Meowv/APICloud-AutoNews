@@ -309,7 +309,7 @@
     {{~it:value:index}}
     <div>
         <a data-article-id="{{=value.ArticleId}}" data-article-title="{{=value.Title}}" data-article-logo="{{=value.Logo}}">
-            <img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" width="100%" src="../image/focus_error.png">
+            <img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" width="100%" src="{{=value.Logo}}">
         </a>
     </div>
     {{~}}
@@ -331,7 +331,7 @@
     {{~it:value:index}}
     <li>
         <a onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
-            <div><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="../image/error.png" width="100%" /></div>
+            <div><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}" width="100%" /></div>
             <p>{{=value.Title}}</p>
         </a>
     </li>
@@ -342,7 +342,7 @@
     <li>
         <a onclick="openDetail('{{=value.ArticleId}}','{{=value.Title}}','{{=value.Logo}}')">
             <dl>
-                <dt><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="../image/error.png" /></dt>
+                <dt><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="{{=value.Logo}}" /></dt>
                 <dd>
                     {{=value.Title}}
                     <p><span style="color:{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
