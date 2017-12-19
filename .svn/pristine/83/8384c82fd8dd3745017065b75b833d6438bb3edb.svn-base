@@ -107,20 +107,7 @@
 
     // 分享
     function showShare() {
-        var mobSharePlus = api.require('mobSharePlus');
-        mobSharePlus.share({
-            title: api.pageParam.Title,
-            titleUrl: 'http://autonews.gasgoo.com/m/Detail/' + api.pageParam.ArticleId + '.html',
-            text: api.pageParam.Title,
-            imgPaths: [api.pageParam.Logo],
-            url: 'http://autonews.gasgoo.com/m/Detail/' + api.pageParam.ArticleId + '.html',
-        }, function(ret, err) {
-            if (ret.status) {
-                api.alert({
-                    msg: JSON.stringify(ret)
-                });
-            }
-        });
+
     }
 
     // 关闭当前窗口

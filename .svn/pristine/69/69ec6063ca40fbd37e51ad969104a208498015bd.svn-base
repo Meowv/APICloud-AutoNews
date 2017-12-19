@@ -109,11 +109,11 @@
     function showShare() {
         var mobSharePlus = api.require('mobSharePlus');
         mobSharePlus.share({
-            title: api.pageParam.Title,
-            titleUrl: 'http://autonews.gasgoo.com/m/Detail/' + api.pageParam.ArticleId + '.html',
-            text: api.pageParam.Title,
-            imgPaths: [api.pageParam.Logo],
-            url: 'http://autonews.gasgoo.com/m/Detail/' + api.pageParam.ArticleId + '.html',
+            title: '北京新鲜事',
+            titleUrl: 'http://autonews.gasgoo.com/m/',
+            text: '这里是测试的内容',
+            imgPaths: ['widget://image/error.jpg'],
+            url: 'http://autonews.gasgoo.com/m/',
         }, function(ret, err) {
             if (ret.status) {
                 api.alert({

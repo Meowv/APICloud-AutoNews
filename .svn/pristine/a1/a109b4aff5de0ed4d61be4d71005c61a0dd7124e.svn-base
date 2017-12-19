@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<security>
+    <item name="mobSharePlus_facebook_apiKey" value="1909317002717979"/>
+    <item name="mobSharePlus_facebook_apiSecret" value="5fb3ef1543894aa6e0f77945d0738cd1"/>
+    <item name="mobSharePlus_mail_apiKey" value="show"/>
+    <item name="mobSharePlus_sms_apiKey" value="show"/>
+</security>

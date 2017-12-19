@@ -30,6 +30,7 @@
         <param name="android_api_secret" value="f2c1cec511f150fe7d4d44289d1055f4"/>
         <param name="ios_api_key" value="23202dafdbe08"/>
         <param name="ios_api_secret" value="f2c1cec511f150fe7d4d44289d1055f4"/>
-        <param name="urlScheme" value="fb1531589540258960"/>
+        <param name="urlScheme" value="fb1909317002717979"/>
+        <param name="urlScheme" value="2kpKFGdrkEXdyCLqdCbZG8kQV"/>
     </feature>
 </widget>
