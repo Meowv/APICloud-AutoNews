@@ -127,9 +127,6 @@
     apiready = function() {
         $api.fixStatusBar($api.byId('header'));
         $api.css($api.dom('body'), 'height:' + (api.winHeight) + 'px;');
-        api.setStatusBarStyle({
-            style: 'dark',
-        });
     }
 
     function sendFeedback() {
@@ -161,7 +158,7 @@
             }
         }
         api.ajax({
-            url: 'https://api.gasgoo.com/api/autonews/add_advise',
+            url: 'https://xj8c.cc/api/autonews/add_advise',
             method: 'post',
             dataType: 'text',
             headers: {

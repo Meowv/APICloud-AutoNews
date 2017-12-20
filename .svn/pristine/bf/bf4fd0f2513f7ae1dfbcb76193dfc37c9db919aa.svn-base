@@ -1,3 +1,0 @@
-0000000000000000000000000000000000000000 5429d3a046679331b0eeca5786ef0206aa274e54 阿星Plus <hackxing@foxmail.com> 1513342268 +0800	clone: from https://github.com/Meowv/APIClode-AutoNews.git
-5429d3a046679331b0eeca5786ef0206aa274e54 d88e2f0979a804c34c779f2bc4a65798c18c4205 阿星Plus <hackxing@foxmail.com> 1513346329 +0800	commit: 优化界面，列表页bug修复，各种调整，考虑是英文APP去掉微信分享
-d88e2f0979a804c34c779f2bc4a65798c18c4205 b67cb78402c0619e4e9819455f1f2586d787e37f 阿星Plus <hackxing@foxmail.com> 1513420887 +0800	commit: 大量更新，搜索，列表，我的模块，清除缓存...中文换英文，之前写小程序的API有点问题，等周一去公司修复一下API，doT竟然无法解决json带英文分号...

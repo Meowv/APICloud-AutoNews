@@ -161,13 +161,13 @@
                 style: 'default',
                 animationType: 'fade',
                 title: 'Loading...',
-                text: 'Wait a moment...',
+                text: ' ',
                 modal: false
             });
         }
         if (isMore) {
             api.ajax({
-                url: 'https://api.gasgoo.com/api/autonews/v2/get_article_searchlist/' + encodeURI(api.pageParam.keyword) + "/" + page,
+                url: 'https://xj8c.cc/api/autonews/v2/get_article_searchlist/' + encodeURI(api.pageParam.keyword) + "/" + page,
                 cache: true,
                 method: 'get'
             }, function(ret, err) {

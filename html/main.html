@@ -209,8 +209,8 @@
                         image: 'rgba(0,0,0,0)'
                     },
                     iconRect: {
-                        w: 27.0,
-                        h: 27.0,
+                        w: 30.0,
+                        h: 30.0,
                     },
                     icon: {
                         normal: 'widget://image/news.png',
@@ -231,8 +231,8 @@
                         image: 'rgba(0,0,0,0)'
                     },
                     iconRect: {
-                        w: 27.0,
-                        h: 27.0,
+                        w: 30.0,
+                        h: 30.0,
                     },
                     icon: {
                         normal: 'widget://image/b2b.png',
@@ -253,8 +253,8 @@
                         image: 'rgba(0,0,0,0)'
                     },
                     iconRect: {
-                        w: 27.0,
-                        h: 27.0,
+                        w: 30.0,
+                        h: 30.0,
                     },
                     icon: {
                         normal: 'widget://image/mine.png',
@@ -348,18 +348,18 @@
                 dataBase = "B2B_SearchData";
             }
             UISearchBar.open({
-                placeholder: 'search',
+                placeholder: 'Search',
                 historyCount: 10,
                 dataBase: dataBase,
                 showRecordBtn: false,
                 texts: {
                     cancelText: 'Cancel',
-                    clearText: 'Clear data'
+                    clearText: 'Clear history'
                 },
                 styles: {
                     navBar: {
-                        bgColor: '#edf1f4',
-                        borderColor: '#ccc'
+                        bgColor: '#fff',
+                        borderColor: '#edf1f4'
                     },
                     searchBox: {
                         bgImg: '',
@@ -373,12 +373,12 @@
                     },
                     list: {
                         color: '#696969',
-                        bgColor: '#FFFFFF',
+                        bgColor: '#FFF',
                         borderColor: '#eee',
                         size: 16
                     },
                     clear: {
-                        color: '#000000',
+                        color: '#000',
                         borderColor: '#ccc',
                         size: 16
                     }
@@ -389,19 +389,17 @@
                     var searchPage;
                     if (flag == "news") {
                         searchPage = 'news_search_list';
-                        openList(keyword, searchPage);
+                        openSearchList(keyword, searchPage);
                     } else {
                         // searchPage = 'b2b_search_list';
-                        // openList(keyword, searchPage);
-                        searchPage = 'news_search_list';
-                        openList(keyword, searchPage);
+                        // openSearchList(keyword, searchPage);
                     }
                 }
             });
         }
 
-        // 打开列表页
-        function openList(keyword, searchPage) {
+        // 打开搜索列表页
+        function openSearchList(keyword, searchPage) {
             api.openWin({
                 name: searchPage,
                 url: './' + searchPage + '.html',

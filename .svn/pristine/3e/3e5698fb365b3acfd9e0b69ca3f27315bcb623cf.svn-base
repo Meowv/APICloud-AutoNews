@@ -1,5 +1,0 @@
-0000000000000000000000000000000000000000 e36132ff018c6821bf92482c6bac8ce1fc9cdbe3 阿星Plus <hackxing@foxmail.com> 1513130010 +0800	clone: from https://github.com/Meowv/APIClode-AutoNews.git
-e36132ff018c6821bf92482c6bac8ce1fc9cdbe3 582224bdd5b80e885123848ae092c986e863e8da 阿星Plus <hackxing@foxmail.com> 1513130131 +0800	commit: 根据官方demo自制底部导航和侧边导航框架模板
-582224bdd5b80e885123848ae092c986e863e8da e4a12d3c3c1c6fa7d9a8e4e7b7522d3169a66fe7 阿星Plus <hackxing@foxmail.com> 1513173952 +0800	commit: 底部导航换用原生模块NVTabBar实现 实现android和ios双平台侧滑及底部导航切换功能的框架开发模板.
-e4a12d3c3c1c6fa7d9a8e4e7b7522d3169a66fe7 b5b267330b425ead273a82a85da38fe63dbfb818 阿星Plus <hackxing@foxmail.com> 1513245498 +0800	commit: 首页数据绑定，轮播图，侧滑模块优化，图片缓存，doT模板引擎，独立搜索页面
-b5b267330b425ead273a82a85da38fe63dbfb818 fb5bfca5cdcbbee48c2da9a7764aa8ea08318739 阿星Plus <hackxing@foxmail.com> 1513259803 +0800	commit: 详情页面搭建，修复JS默认值在android下报错的bug，确认双平台显示无误

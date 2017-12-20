@@ -74,18 +74,7 @@
 <script src="../script/api.js"></script>
 <script src="../script/doT.min.js"></script>
 <script>
-    var articleId,
-        title,
-        logo,
-        description;
-
     apiready = function() {
-        articleId = api.pageParam.ArticleId;
-        title = api.pageParam.Title;
-        logo = api.pageParam.Logo;
-        if (logo == 'undefined') {
-            logo = "widget://image/logo.jpg";
-        }
         getArticle();
     }
 
@@ -95,11 +84,11 @@
             style: 'default',
             animationType: 'fade',
             title: 'Loading...',
-            text: 'Wait a moment...',
+            text: ' ',
             modal: false
         });
         api.ajax({
-            url: 'https://api.gasgoo.com/api/autonews/get_article/' + articleId,
+            url: 'https://xj8c.cc/api/autonews/get_article/' + api.pageParam.ArticleId,
             cache: true,
             method: 'get'
         }, function(ret, err) {
