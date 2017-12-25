@@ -2,4 +2,8 @@
 <security>
     <item name="mobSharePlus_facebook_apiKey" value="391376804623006"/>
     <item name="mobSharePlus_facebook_apiSecret" value="e04d1fb2bea69bb9c0bc2887c0db20dd"/>
+
+    <item name="mobSharePlus_twitter_apiKey" value="VVpTYuNnJC4bnsoYLKTGPcBNV"/>
+    <item name="mobSharePlus_twitter_apiSecret" value="r3FDwSeJErBYr5SwrGvdYIi501Ga8q6v42OjAUqzpIiGv2ZAL9"/>
+    <item name="mobSharePlus_twitter_registUrl" value="http://autonews.gasgoo.com"/>
 </security>

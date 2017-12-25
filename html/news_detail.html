@@ -92,7 +92,7 @@
         title = api.pageParam.Title;
         logo = api.pageParam.Logo;
         if (logo == 'undefined') {
-            logo = "widget://image/logo.jpg";
+            logo = "http://c2.gasgoo.com/auto/images/weixin_share_default_logo.jpg";
         }
     }
 
@@ -126,8 +126,10 @@
             url: 'http://autonews.gasgoo.com/m/Detail/' + articleId + '.html',
         }, function(ret, err) {
             if (ret.status) {
-                api.alert({
-                    msg: JSON.stringify(ret)
+                api.toast({
+                    msg: 'Shared',
+                    duration: 2000,
+                    location: 'middle'
                 });
             }
         });
