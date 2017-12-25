@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
         .header {
-            background-color: #fff;
             height: 44px;
         }
 
@@ -33,18 +32,23 @@
             box-sizing: border-box;
         }
 
-        .header .search {
+        .news .search {
             width: 55px;
             margin-top: 5px;
         }
 
-        .header .search a {
+        .news .search a {
             background: url(../image/menu.png) no-repeat center;
-            background-size: 18px;
+            background-size: 25px;
             width: 30px;
             height: 30px;
             margin: 0px auto;
             display: block;
+        }
+
+        .return a {
+            background: url(../image/his.png) no-repeat center !important;
+            background-size: 11px !important;
         }
 
         .header .searchKuan {
@@ -84,12 +88,25 @@
         .header .searchMagnifier {
             width: 55px;
             background: url(../image/search.png) no-repeat center;
-            background-size: 16px;
+            background-size: 25px;
             margin-top: 5px;
         }
 
         .hide {
             display: none;
+        }
+        /*b2b头部*/
+
+        .b2b .searchMagnifier {
+            width: 55px;
+            background: url(../image/search.png) no-repeat center;
+            background-size: 25px;
+            margin-top: 5px;
+        }
+
+        .b2b .search {
+            width: 10px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -102,7 +119,7 @@
                     <a></a>
                 </li>
                 <li class="searchKuan" onclick="openSeachBar('news')">
-                    <div class="inputSear"><a> search</a></div>
+                    <div class="inputSear"><a> Search Gasgoo AutoNews</a></div>
                 </li>
                 <li class="searchMagnifier" onclick="openSeachBar('news')">
                     <a></a>
@@ -110,247 +127,264 @@
             </ul>
         </div>
         <div class="header b2b">
-            <!-- <ul>
-                <li class="searchKuan" style="margin-left:20px;" onclick="openSeachBar('b2b')">
-                    <div class="inputSear"><a> search</a></div>
+            <ul>
+                <li class="search">
+                    <a></a>
+                </li>
+                <li class="searchKuan" onclick="openSeachBar('b2b')">
+                    <div class="inputSear"><a> Search Gasgoo B2B</a></div>
                 </li>
                 <li class="searchMagnifier" onclick="openSeachBar('b2b')">
                     <a></a>
                 </li>
-            </ul> -->
+            </ul>
         </div>
-        <div class="header mine"></div>
+        <div class="header mine hide"></div>
     </header>
-    <section class="canopy"></section>
-    <script src="../script/api.js"></script>
-    <script>
-        // 公共变量
-        var headerH,
-            footerH = 50,
-            winWidth,
-            winHeight,
-            selectedIndex = 0;
+</body>
+<script src="../script/api.js"></script>
+<script>
+    // 公共变量
+    var headerH,
+        footerH = 50,
+        winWidth,
+        winHeight,
+        selectedIndex = 0;
 
-        // NVTabBar底部导航模块
-        var NVTabBar;
-        // UISearchBar独立搜索模块
-        var UISearchBar;
+    // NVTabBar底部导航模块
+    var NVTabBar;
+    // UISearchBar独立搜索模块
+    var UISearchBar;
 
-        apiready = function() {
-            init();
-        };
+    apiready = function() {
+        init();
+        openFrameGroup();
+    };
 
-        // init.
-        function init() {
-            headerH = $api.offset($api.dom($api.byId('header'), '.header')).h + 25;
+    // init.
+    function init() {
+        headerH = $api.offset($api.dom($api.byId('header'), '.header')).h + 25;
 
-            $api.fixStatusBar($api.byId('header'));
+        $api.fixStatusBar($api.byId('header'));
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#fff'
+        });
 
-            // 监听返回键
-            api.addEventListener({
-                name: 'keyback'
-            }, function(ret, err) {
-                var js = 'api.historyBack(function(ret, err){if(ret.status){}else{api.closeWidget();}});';
-                api.execScript({
-                    frameName: 'mb',
-                    script: js
-                });
-                api.execScript({
-                    frameName: 'news',
-                    script: js
-                });
-                api.execScript({
-                    frameName: 'mine',
-                    script: js
-                });
-            });
+        // 监听返回键
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            api.closeWidget();
+        });
 
-            // 窗口宽高
-            winWidth = api.winWidth;
-            winHeight = api.winHeight;
+        // 窗口宽高
+        winWidth = api.winWidth;
+        winHeight = api.winHeight;
 
-            // 导入搜索模块
-            UISearchBar = api.require("UISearchBar");
+        // 导入搜索模块
+        UISearchBar = api.require("UISearchBar");
 
-            // 导入底部导航模块
-            NVTabBar = api.require('NVTabBar');
-            openTabBar();
-        }
+        // 导入底部导航模块
+        NVTabBar = api.require('NVTabBar');
+        openTabBar();
+    }
 
-        // 打开侧边栏
-        function openSlid() {
-            api.openSlidPane({
-                type: 'left'
-            });
-        }
+    // FrameGroup
+    function openFrameGroup() {
+        api.openFrameGroup({
+            name: 'group',
+            background: '#fff',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: winHeight - headerH - footerH
+            },
+            index: 0,
+            frames: [{
+                name: 'news',
+                url: 'news.html',
+                bgColor: '#fff',
+                bounces: true
+            }, {
+                name: 'b2b',
+                url: 'b2b.html',
+                bgColor: '#fff',
+                bounces: true
+            }, {
+                name: 'mine',
+                url: 'mine.html',
+                bgColor: '#fff',
+                bounces: false
+            }]
+        }, function(ret, err) {});
+    }
 
-        // 关闭 frame
-        function closeFrame(name) {
-            api.closeFrame({
-                name: name
-            });
-        }
+    // 打开侧边栏
+    function openSlid() {
+        api.openSlidPane({
+            type: 'left'
+        });
+    }
 
-        // TabBar
-        function openTabBar() {
-            NVTabBar.open({
-                styles: {
-                    bg: '#f2f2f2',
-                    h: footerH,
-                    dividingLine: {
-                        width: 0.5,
-                        color: '#e2e2e2'
-                    }
-                },
-                items: [{
-                    w: winWidth / 3.0,
-                    bg: {
-                        marginB: 0,
-                        image: 'rgba(0,0,0,0)'
-                    },
-                    iconRect: {
-                        w: 30.0,
-                        h: 30.0,
-                    },
-                    icon: {
-                        normal: 'widget://image/news.png',
-                        highlight: 'widget://image/news_active.png',
-                        selected: 'widget://image/news_active.png'
-                    },
-                    title: {
-                        text: 'News',
-                        size: 12.0,
-                        normal: '#a4b0b9',
-                        selected: '#00568f',
-                        marginB: 3.0
-                    }
-                }, {
-                    w: winWidth / 3.0,
-                    bg: {
-                        marginB: 0,
-                        image: 'rgba(0,0,0,0)'
-                    },
-                    iconRect: {
-                        w: 30.0,
-                        h: 30.0,
-                    },
-                    icon: {
-                        normal: 'widget://image/b2b.png',
-                        highlight: 'widget://image/b2b_active.png',
-                        selected: 'widget://image/b2b_active.png'
-                    },
-                    title: {
-                        text: 'B2B',
-                        size: 12.0,
-                        normal: '#a4b0b9',
-                        selected: '#00568f',
-                        marginB: 3.0
-                    }
-                }, {
-                    w: winWidth / 3.0,
-                    bg: {
-                        marginB: 0,
-                        image: 'rgba(0,0,0,0)'
-                    },
-                    iconRect: {
-                        w: 30.0,
-                        h: 30.0,
-                    },
-                    icon: {
-                        normal: 'widget://image/mine.png',
-                        highlight: 'widget://image/mine_active.png',
-                        selected: 'widget://image/mine_active.png'
-                    },
-                    title: {
-                        text: 'Mine',
-                        size: 12.0,
-                        normal: '#a4b0b9',
-                        selected: '#00568f',
-                        marginB: 3.0
-                    }
-                }],
-                selectedIndex: selectedIndex
-            }, function(ret, err) {
-                if (ret) {
-                    if (ret.eventType == "show") {
-                        openFrame(selectedIndex);
-                    } else {
-                        openFrame(ret.index);
-                    }
+    // TabBar
+    function openTabBar() {
+        NVTabBar.open({
+            styles: {
+                bg: '#f2f2f2',
+                h: footerH,
+                dividingLine: {
+                    width: 0.5,
+                    color: '#e2e2e2'
                 }
+            },
+            items: [{
+                w: winWidth / 3.0,
+                bg: {
+                    marginB: -2,
+                    image: 'rgba(0,0,0,0)'
+                },
+                iconRect: {
+                    w: 25.0,
+                    h: 25.0,
+                },
+                icon: {
+                    normal: 'widget://image/news.png',
+                    highlight: 'widget://image/news_active.png',
+                    selected: 'widget://image/news_active.png'
+                },
+                title: {
+                    text: 'News',
+                    size: 13.0,
+                    normal: '#a4b0b9',
+                    selected: '#00568f',
+                    marginB: 3.0
+                }
+            }, {
+                w: winWidth / 3.0,
+                bg: {
+                    marginB: -2,
+                    image: 'rgba(0,0,0,0)'
+                },
+                iconRect: {
+                    w: 25.0,
+                    h: 25.0,
+                },
+                icon: {
+                    normal: 'widget://image/b2b.png',
+                    highlight: 'widget://image/b2b_active.png',
+                    selected: 'widget://image/b2b_active.png'
+                },
+                title: {
+                    text: 'B2B',
+                    size: 13.0,
+                    normal: '#a4b0b9',
+                    selected: '#00568f',
+                    marginB: 3.0
+                }
+            }, {
+                w: winWidth / 3.0,
+                bg: {
+                    marginB: -2,
+                    image: 'rgba(0,0,0,0)'
+                },
+                iconRect: {
+                    w: 25.0,
+                    h: 25.0,
+                },
+                icon: {
+                    normal: 'widget://image/mine.png',
+                    highlight: 'widget://image/mine_active.png',
+                    selected: 'widget://image/mine_active.png'
+                },
+                title: {
+                    text: 'Me',
+                    size: 13.0,
+                    normal: '#a4b0b9',
+                    selected: '#00568f',
+                    marginB: 3.0
+                }
+            }],
+            selectedIndex: selectedIndex
+        }, function(ret, err) {
+            if (ret) {
+                setCurrentFrame(ret);
+            }
+        });
+
+        NVTabBar.bringToFront();
+    }
+
+    // 设置FrameGroup属性
+    function setCurrentFrame(ret) {
+        if (ret.eventType == "show") {
+            api.setFrameGroupIndex({
+                name: 'group',
+                index: selectedIndex
             });
-
-            NVTabBar.bringToFront();
-        }
-
-        // 通过导航索引打开页面
-        function openFrame(index) {
-            var name,
-                _headerH,
-                bounces = true;
-
-            if (index == 0) {
-                name = "news";
-                closeFrame('b2b');
-                closeFrame('mb');
-                closeFrame('mine');
-                $api.removeCls($api.dom('.news'), 'hide');
-                $api.addCls($api.dom('.b2b'), 'hide');
-                $api.addCls($api.dom('.mine'), 'hide');
-            } else if (index == 1) {
-                name = "b2b";
-                closeFrame('news');
-                closeFrame('mine');
-                $api.removeCls($api.dom('.b2b'), 'hide');
-                $api.addCls($api.dom('.mine'), 'hide');
-                $api.addCls($api.dom('.news'), 'hide');
-            } else {
-                name = "mine";
-                bounces = false;
-                closeFrame('news');
-                closeFrame('b2b');
-                closeFrame('mb');
-                $api.removeCls($api.dom('.mine'), 'hide');
-                $api.addCls($api.dom('.b2b'), 'hide');
-                $api.addCls($api.dom('.news'), 'hide');
-            }
-
-            if (index == 2) {
-                _headerH = 0;
-            } else {
-                _headerH = headerH;
-            }
-
-            api.openFrame({
-                name: name,
-                url: name + '.html',
+            api.setFrameGroupAttr({
+                name: 'group',
                 rect: {
                     x: 0,
-                    y: _headerH,
+                    y: headerH,
                     w: 'auto',
-                    h: winHeight - _headerH - footerH
+                    h: winHeight - headerH - footerH
                 },
-                bounces: bounces,
-                bgColor: 'rgba(0,0,0,0)',
-                vScrollBarEnabled: false,
-                hScrollBarEnabled: false,
-                scrollToTop: true,
-                reload: false
             });
-        }
-
-        // SeachBar
-        function openSeachBar(flag) {
-            var dataBase;
-            if (flag == "news") {
-                dataBase = "NEWS_SearchData";
+        } else {
+            api.setFrameGroupIndex({
+                name: 'group',
+                index: ret.index,
+            });
+            if (ret.index == 0) {
+                $api.removeCls($api.dom('.news'), 'hide');
+                $api.addCls($api.dom('.b2b'), 'hide');
+                api.setFrameGroupAttr({
+                    name: 'group',
+                    rect: {
+                        x: 0,
+                        y: headerH,
+                        w: 'auto',
+                        h: winHeight - headerH - footerH
+                    },
+                });
+                api.unlockSlidPane();
+            } else if (ret.index == 1) {
+                $api.removeCls($api.dom('.b2b'), 'hide');
+                $api.addCls($api.dom('.news'), 'hide');
+                api.setFrameGroupAttr({
+                    name: 'group',
+                    rect: {
+                        x: 0,
+                        y: headerH,
+                        w: 'auto',
+                        h: winHeight - headerH - footerH
+                    },
+                });
+                api.lockSlidPane();
             } else {
-                dataBase = "B2B_SearchData";
+                api.setFrameGroupAttr({
+                    name: 'group',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: winHeight - footerH
+                    },
+                });
+                api.lockSlidPane();
             }
+        }
+    }
+
+    // SeachBar
+    function openSeachBar(type) {
+        if (type == 'news') {
             UISearchBar.open({
                 placeholder: 'Search',
                 historyCount: 10,
-                dataBase: dataBase,
                 showRecordBtn: false,
                 texts: {
                     cancelText: 'Cancel',
@@ -384,34 +418,34 @@
                     }
                 }
             }, function(ret, err) {
-                if (ret) {
-                    var keyword = ret.text;
-                    var searchPage;
-                    if (flag == "news") {
-                        searchPage = 'news_search_list';
-                        openSearchList(keyword, searchPage);
-                    } else {
-                        // searchPage = 'b2b_search_list';
-                        // openSearchList(keyword, searchPage);
-                    }
+                if ($api.trim(ret.text) != '') {
+                    openSearchList(ret.text, 'news_search_list');
+                } else {
+                    api.toast({
+                        msg: 'Enter your keywords',
+                        duration: 4000,
+                        location: 'middle'
+                    });
                 }
             });
+        } else {
+            openSearchList('', 'b2b_search_list');
         }
+    }
 
-        // 打开搜索列表页
-        function openSearchList(keyword, searchPage) {
-            api.openWin({
-                name: searchPage,
-                url: './' + searchPage + '.html',
-                pageParam: {
-                    keyword: keyword
-                },
-                animation: {
-                    trpe: 'fade'
-                }
-            });
-        }
-    </script>
-</body>
+    // 打开搜索列表页
+    function openSearchList(keyword, searchPage) {
+        api.openWin({
+            name: searchPage,
+            url: './' + searchPage + '.html',
+            pageParam: {
+                keyword: keyword
+            },
+            animation: {
+                trpe: 'fade'
+            }
+        });
+    }
+</script>
 
 </html>

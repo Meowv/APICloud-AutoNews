@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+   <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/mui.picker.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/mui.poppicker.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/hui.css"/>
+    <style>
+    </style>
+</head>
+<body>
+    <div id="InfoBox">
+        
+    </div>
+   <div>
+    <dl>
+        <dt>*Message:</dt>
+        <dd><textarea id="message" rows="5" maxlength="3000"></textarea><span>20 characters at least. </span></dd>
+    </dl>
+    <dl>
+        <dt>*Your Email:</dt>
+        <dd><input id="email" type="text" name=""></dd>
+    </dl>
+    <dl>
+        <dt>*Your Name:</dt>
+        <dd><input id="usermae" type="text" name=""></dd>
+    </dl>
+    <dl>
+        <dt><span>*</span>Country/Region:</dt>
+        <dd>
+            <div id="countryPicker" class="HUI_Icons HUI_Icons_down" style="padding-top: 3px; border-radius: 10px; display: block; height: 30px; text-align: center; border: 1px solid #ddd; width: 100%;" >
+                        --Select country/region--
+             </div>
+             <input type="hidden" id="hiddenValue" value="-1" runat="server" />
+        </dd>
+    </dl>
+    </div>
+</body>
+
+<script type="text/template" id="InfoBox_template">
+    {{~it:value:index}}
+     <dl>
+        <dt>To:</dt>
+        <dd id="toText">{{=value.ProductName}}{{=value.CompanyName}}</dd>
+    </dl>
+    <dl>
+        <dt>*Subject:</dt>
+        <dd >
+        <input id="subject" type="text" name="" value="Inquiry about {{=value.ProductName}}" />
+        </dd>
+    </dl>
+    {{~}}
+</script>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript" src="../script/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../script/mui.min.js"></script>
+<script type="text/javascript" src="../script/mui.picker.js"></script>
+<script type="text/javascript" src="../script/mui.poppicker.js"></script>
+<script type="text/javascript" src="../script/hui.js"></script>
+<script type="text/javascript" src="../script/huiForm.js"></script>
+<script type="text/javascript" src="../script/jquery.cookie.min.js"></script>
+
+<script type="text/javascript">
+    var productID,Countries;
+    apiready = function(){
+        productID=api.pageParam.productID;
+        getProductByID(productID);
+    };
+
+
+    function getProductByID(productID){
+        //友好加载
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: 'Loading...',
+            text: 'Wait a moment...',
+            modal: false
+        });
+        api.ajax({
+            url: 'http://192.168.40.20:8090/api/mbgasgoo/get_ContactSupplier_Product/'+productID,
+            method: 'get',
+        },function(ret, err){
+            if (ret) {
+               //$api.html($api.byId('toText'),ret.ProductName+ret.CompanyName);
+               var tempEn=doT.template($api.byId('InfoBox_template').innerHTML);
+               $api.html($api.byId('InfoBox'), tempEn(ret));
+               var tmp=ret[0].Countries;
+               Countries=[
+               ];
+
+               for (var i = 0; i <tmp.length; i++) {
+                 var country={value:tmp[i].RefID,text:tmp[i].Name};
+                 Countries[i]=country;
+               }
+               showCountry(Countries);
+            } else {
+                api.toast({
+                    msg: 'Error',
+                    duration: 4000,
+                    location: 'bottom'
+                });
+            }
+        });
+        api.hideProgress();
+    }
+
+
+    function showCountry(Countries){
+        function huiFormCheckAttach() {
+        //Check region
+            var curRegion = $("#hdnCountry").val()//jQuery('#countryPicker').attr("data-value");
+            if (curRegion == -1) {
+                hui.toast('Please select the country/region of your country'); return false;
+            }
+            return true;
+        }
+
+        (function ($, doc, $$) {
+            function changeCookie(cookieValue,cookieName) {
+                if (cookieValue != null && cookieValue != "") {
+                    $$.cookie(cookieName, cookieValue, { expires: 1000 });
+                } else if ($$.cookie(cookieName) != undefined && $$.cookie(cookieName) != "") {
+                    $$.removeCookie(cookieName);
+                }
+            }
+            $.init();
+            $.ready(function () {
+                //普通示例
+                var userPicker = new $.PopPicker({ buttons: ['Cancel', 'OK'] });
+                userPicker.setData(Countries);
+                var showUserPickerButton = doc.getElementById('countryPicker');
+                //var userResult = doc.getElementById('userResult');
+                showUserPickerButton.addEventListener('tap', function (event) {
+                    userPicker.show(function (items) {
+                        //userResult.innerText = JSON.stringify(items[0]);
+                        $$('#countryPicker').html(items[0].text);
+                        //$$('#countryPicker').attr("data-value", items[0].value);
+                        $$("#hiddenValue").val(items[0].value);
+                        changeCookie(items[0].value, "gs-mb-prodiqy-country");
+                        //返回 false 可以阻止选择框的关闭
+                        //return false;
+                    });
+                }, false);
+
+                if ($$.cookie('gs-mb-prodiqy-country') != undefined && $$.cookie('gs-mb-prodiqy-country') != "") {
+                    userPicker.pickers[0].setSelectedValue($$.cookie('gs-mb-prodiqy-country'));
+                    if (!!userPicker.getSelectedItems()[0])
+                    $$('#countryPicker').text(userPicker.getSelectedItems()[0].text);
+                    $$("#hiddenValue").val($$.cookie('gs-mb-prodiqy-country'));
+                }
+            });
+
+            hui.ready(function () { hui.formInit(); });
+            function submitNow() {
+                if (huiFormCheck('#form1')) {
+                    hui.centerLoading();
+                    $$("#form1").submit();
+                }
+            }
+
+            $$("#btnSubmit").click(function () {
+                submitNow();
+            });
+
+            $$(function () {
+
+                if ($$.cookie('gs-mb-prodiqy-email') != undefined && $$.cookie('gs-mb-prodiqy-email') != "") {
+                    $$("#txtEmail").val($$.cookie('gs-mb-prodiqy-email'));
+                }
+                if ($$.cookie('gs-mb-prodiqy-uname') != undefined && $$.cookie('gs-mb-prodiqy-uname') != "") {
+                    $$("#txtName").val($$.cookie('gs-mb-prodiqy-uname'));
+                }
+
+                $$("#txtEmail").on("input propertychange", function() { changeCookie(this.value,"gs-mb-prodiqy-email") });
+                $$("#txtName").on("input propertychange", function() { changeCookie(this.value,"gs-mb-prodiqy-uname") });
+               
+            });
+           
+        })(mui, document, jQuery);
+    }
+
+
+
+    function sendMessage(){
+        var  Subject=$$('#subject').val();
+        var  Message=$$('#Message').val();
+        var  Email=$$('#Email').val();
+        var  userName=$$('#userName').val();
+        var  countryRefID=$$('#hiddenValue').val();
+        if(Subject==''){
+            api.toast({
+                msg: 'Please enter your message subject',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+        }
+        if (Message=="" || Message.length<20) {
+            api.toast({
+                msg: 'Please enter your message(at least 20 characters)',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+        }
+        if(Email==""){
+            api.toast({
+                msg: 'Please enter your valid email address',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+        }else{
+            var r_email = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            if(!r_email.test(Email)){
+                api.toast({
+                    msg: 'Please enter your valid email address',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                return;
+            }
+        }
+        if (userName=="") {
+            api.toast({
+                msg: 'Please enter your Name',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+        }
+        if(countryRefID==-1){
+            api.toast({
+                msg: 'Please select country/region of your country',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+        }
+
+        api.ajax({
+            url: 'http://192.168.40.20:8090/api/mbgasgoo/add_ContactMessageQueue',
+            method: 'post',
+            dataType: 'text',
+            headers: {
+                "Content-Type": 'application/json; charset=utf-8'
+            },
+            data: {
+                body: "{ 'subject':'" + Subject + "','email':'" + Email + "','messageText':'"+Message+"','userName':'"+userName+"','productId':'"+productID+"','refId':'"+refId+"'}"
+            }
+        },function(ret, err){
+            if (ret) {
+                
+            } else {
+                api.toast({
+                    msg: 'Error',
+                    duration: 4000,
+                    location: 'bottom'
+                });
+            }
+        });
+
+    }
+</script>
+<!-- <script type="text/javascript" src="../script/proiqr.js"></script> -->
+</html>

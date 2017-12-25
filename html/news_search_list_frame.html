@@ -98,6 +98,9 @@
         .hide {
             display: none;
         }
+        .red {
+            color: #fe7a18;
+        }
     </style>
 </head>
 
@@ -127,7 +130,7 @@
                 </dt> {{?}}
                 <dd>
                     {{=value.Title}}
-                    <p><span style="color:{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
+                    <p><span class="{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
                 </dd>
             </dl>
         </a>
@@ -167,7 +170,7 @@
         }
         if (isMore) {
             api.ajax({
-                url: 'https://xj8c.cc/api/autonews/v2/get_article_searchlist/' + encodeURI(api.pageParam.keyword) + "/" + page,
+                url: 'https://api.xj8c.cc/api/autonews/v2/get_article_searchlist/' + encodeURI($api.trim(api.pageParam.keyword)) + "/" + page,
                 cache: true,
                 method: 'get'
             }, function(ret, err) {

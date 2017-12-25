@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <style>
+    .banner{ 
+       /* width:320px;
+        height: 320px;*/
+    }
+        .banner .bannerTU img{ 
+            /*width:320px; */
+            vertical-align:top;
+        }
+
+        .banner {
+            overflow: hidden;
+            /*这两行不能移除，不然会滑出屏幕*/
+            visibility: hidden;
+            position: relative;
+        }
+
+        .bannerTU{
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bannerTU>div {
+            float: left;
+            width: 100%;
+            position: relative;
+        }
+
+        .bannerTU>div>a {
+            display: block;
+        }
+
+        .bannerTU>div>a>img {
+            width: 100%;
+        }
+
+        .ulyq {
+            position: absolute;
+            top: 10px;
+            right: 4%;
+            /*-webkit-transform: translateX(-50%);*/
+            z-index: 10;
+        }
+
+        .ulyq a {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 30px;
+            opacity: 0.8;
+            background-color: #a5a5a5;
+        }
+
+        .ulyq a.pitch {
+            width: 14px;
+            height: 5px;
+            border-radius: 30px;
+            opacity: 0.8;
+            background-color: #df3031;
+        }
+
+    </style>
+</head>
+<body>
+    <article id="swipe" class="banner" tapmode="hover">
+        <div class="bannerTU">
+        </div>
+        <ul id="swipeIndicator" class="ulyq">
+        </ul>
+    </article> 
+    <div id="contactsupplier"></div>
+</body>
+
+
+<script type="text/template" id="tmp_focusImg">
+    {{~it:value:index}}
+    <div>
+        <a  data-article-logo="{{=value.ImagePath}}">
+            <img  onload="loadingImgCache(this)" data-url="http://images.gasgoo.com{{=value.ImagePath}}" src="../image/focus_error.png">
+        </a>
+    </div>
+    {{~}}
+</script>
+
+<script type="text/template" id="tmp_focusIndicator">
+    {{~it:value:index}} {{?index ==0 }}
+    <a class="pitch"></a>
+    {{??}}
+    <a></a>
+    {{?}} {{~}}
+</script>
+
+<script type="text/template" id="Contact">
+    {{~it:value:index}}
+    <div>
+        <a onclick="contactsupplier({{=value.Product.ProductID}})">
+            Contact Supplier
+        </a>
+    </div>
+    {{~}}
+</script>
+
+
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/swipe.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript">
+    var productID;
+    apiready = function(){
+        productID=api.pageParam.productID;
+        getProductByID(productID);
+    };
+
+
+    function getProductByID(productID){
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: 'Loading...',
+            text: 'Wait a moment...',
+            modal: false
+        });
+        api.ajax({
+            url: 'http://192.168.40.20:8090/api/mbgasgoo/get_Product_Detail/'+productID+'/',
+            method: 'get',
+        },function(ret, err){
+            if (ret) {
+
+                
+                // 获取模板
+                var tmp_focusImg = doT.template($api.byId('tmp_focusImg').innerHTML);
+                var tmp_focusIndicator = doT.template($api.byId('tmp_focusIndicator').innerHTML);
+                // 绑定数据
+                $api.html($api.dom('.bannerTU'), tmp_focusImg(ret[0].Images));
+                $api.html($api.byId('swipeIndicator'), tmp_focusIndicator(ret[0].Images));
+
+                var tmp_contactsupplier = doT.template($api.byId('Contact').innerHTML);
+                
+                $api.html($api.byId('contactsupplier'), tmp_contactsupplier(ret));
+                //轮播产品图片
+                swipeInit();
+            } else {
+                api.toast({
+                    msg: 'Error',
+                    duration: 4000,
+                    location: 'bottom'
+                });
+            }
+            api.hideProgress();
+        });
+    }
+
+     // 轮播初始化
+    function swipeInit() {
+        var indicator = $api.byId('swipeIndicator');
+        var indicators = $api.domAll(indicator, 'a');
+       
+        window._swipe = new Swipe($api.byId('swipe'), {
+            auto: 5000,
+            continuous: true,
+            stopPropagation: false,
+            callback: function(index, elem) {
+                for (var i = 0; i < indicators.length; i++) {
+                    if ((index % indicators.length) == i) {
+                        $api.addCls(indicators[i], 'pitch');
+                    } else {
+                        $api.removeCls(indicators[i], 'pitch');
+                    }
+                }
+            }
+        });
+    };
+
+
+    // 缓存图片
+    function loadingImgCache(_this) {
+
+        var data_url = $api.attr(_this, 'data-url');
+        if (data_url) {
+            api.imageCache({
+                url: data_url,
+                thumbnail: false,
+                policy: 'cache_only'
+            }, function(ret, err) {
+                if (ret) {
+                    _this.src = ret.url;
+                    $api.attr(_this, 'data-url', '');
+                }
+            });
+        }
+    }
+
+
+    function contactsupplier(productID){
+      api.openWin({
+          name: 'contactsupplier',
+          url: './contact_supplier.html',
+          pageParam: {
+              productID:productID
+          },
+           animation:{
+                type: "fade"
+          }
+      });
+    }
+</script>
+</html>

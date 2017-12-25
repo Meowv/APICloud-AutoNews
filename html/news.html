@@ -129,6 +129,7 @@
 
         .sales ul {
             padding: 10px 0px;
+            padding-top: 3px;
             overflow: hidden;
             display: -webkit-box;
             display: -webkit-flex;
@@ -139,7 +140,7 @@
         }
 
         .sales ul li {
-            margin: 0% 2%;
+            margin: 0% 0.5%;
             -webkit-box-flex: 1;
             -webkit-flex: 1;
             flex: 1;
@@ -158,9 +159,31 @@
         }
 
         .title {
-            font-size: 16px;
+            font-size: 18px;
             font-size: #000;
             padding: 0.7em 0.5em 0em;
+            font-weight: bold;
+        }
+
+        .title span.red {
+            border-left: 7px solid #FF0004;
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+        }
+
+        .title span.blue {
+            border-left: 7px solid #2092d8;
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+        }
+
+        .title span.orange {
+            border-left: 7px solid #fdb91a;
+            display: inline-block;
+            width: 8px;
+            height: 15px;
         }
 
         a.more {
@@ -171,6 +194,7 @@
             font-size: 0.6em;
             display: block;
             font-size: 14px;
+            font-weight: bold;
         }
 
         .center {
@@ -274,6 +298,10 @@
         .find span {
             color: #ff0000;
         }
+
+        .red {
+            color: #fe7a18;
+        }
     </style>
 </head>
 
@@ -290,19 +318,19 @@
         <ul></ul>
     </section>
     <section class="list">
-        <p class="title">China News</p>
+        <p class="title"><span class="red"></span>China News</p>
         <ul class="china-news"></ul>
-        <a class="more" tapmode="hover" onclick="openList(2)">more</a>
+        <a class="more" tapmode="hover" onclick="openList(2)">MORE</a>
     </section>
     <section class="list">
-        <p class="title">New Energy</p>
+        <p class="title"><span class="blue"></span>New Energy</p>
         <ul class="new-energy"></ul>
-        <a class="more" tapmode="hover" onclick="openList(7)">more</a>
+        <a class="more" tapmode="hover" onclick="openList(7)">MORE</a>
     </section>
     <section class="list">
-        <p class="title">Data Center</p>
+        <p class="title"><span class="orange"></span>Data Center</p>
         <div class="center"></div>
-        <a class="more" tapmode="hover" onclick="openList(9)">more</a>
+        <a class="more" tapmode="hover" onclick="openList(9)">MORE</a>
     </section>
 </body>
 <script type="text/template" id="tmp_focusImg">
@@ -345,7 +373,7 @@
                 <dt><img onload="loadingImgCache(this)" data-url="{{=value.Logo}}" src="../image/error.png" /></dt>
                 <dd>
                     {{=value.Title}}
-                    <p><span style="color:{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
+                    <p><span class="{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
                 </dd>
             </dl>
         </a>
@@ -365,8 +393,6 @@
 <script>
     // Init
     apiready = function() {
-        // 解锁侧滑
-        api.unlockSlidPane();
         // 焦点大图
         getBigFocus();
         // 焦点两小图
@@ -496,7 +522,7 @@
 
     function getBigFocus() {
         api.ajax({
-            url: 'https://xj8c.cc/api/autonews/get_article_focus_big',
+            url: 'https://api.xj8c.cc/api/autonews/get_article_focus_big',
             cache: true,
             method: 'get'
         }, function(ret, err) {
@@ -523,7 +549,7 @@
 
     function getSmallFocus() {
         api.ajax({
-            url: 'https://xj8c.cc/api/autonews/get_article_focus_small',
+            url: 'https://api.xj8c.cc/api/autonews/get_article_focus_small',
             cache: true,
             method: 'get'
         }, function(ret, err) {
@@ -541,7 +567,7 @@
 
     function getChinaNews() {
         api.ajax({
-            url: 'https://xj8c.cc/api/autonews/get_article_top/2',
+            url: 'https://api.xj8c.cc/api/autonews/get_article_top/2',
             cache: true,
             method: 'get'
         }, function(ret, err) {
@@ -560,7 +586,7 @@
 
     function getNewEnergy() {
         api.ajax({
-            url: 'https://xj8c.cc/api/autonews/get_article_top/7',
+            url: 'https://api.xj8c.cc/api/autonews/get_article_top/7',
             cache: true,
             method: 'get'
         }, function(ret, err) {
@@ -578,7 +604,7 @@
 
     function getDataCenter() {
         api.ajax({
-            url: 'https://xj8c.cc/api/autonews/get_article_datacenter',
+            url: 'https://api.xj8c.cc/api/autonews/get_article_datacenter',
             cache: true,
             method: 'get'
         }, function(ret, err) {

@@ -133,7 +133,9 @@
     var paneName = ['feedback', 'aboutus', 'contactus'];
 
     apiready = function() {
-        api.lockSlidPane();
+        api.setStatusBarStyle({
+            style: 'dark'
+        });
 
         $api.css($api.dom('body'), 'height:' + (api.winHeight - 50) + 'px;');
 
@@ -150,14 +152,22 @@
     }
 
     function ClearCache() {
-        api.clearCache(function() {
-            setTimeout(function() {
-                getCacheSize();
-                api.toast({
-                    msg: 'Clear success',
-                    location: 'middle'
+        api.actionSheet({
+            title: 'Clear Cache?',
+            cancelTitle: 'Cancel',
+            buttons: ['OK']
+        }, function(ret, err) {
+            if (ret.buttonIndex == 1) {
+                api.clearCache(function() {
+                    setTimeout(function() {
+                        getCacheSize();
+                        api.toast({
+                            msg: 'Clear success',
+                            location: 'middle'
+                        });
+                    }, 300);
                 });
-            }, 300);
+            }
         });
     }
 

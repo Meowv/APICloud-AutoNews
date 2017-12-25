@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
+    <style>
+        body{
+            
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <ul id="productList">
+            
+        </ul>
+    </div>
+</body>
+<script type="text/template" id="productListTemplate">
+    {{~it:value:index}}
+    <li onclick="openDetail({{=value.ProductID}})">{{=value.ProductNameFormat}}</li>
+    {{~}}
+</script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/doT.min.js"></script>
+<script type="text/javascript">
+    var categoryID,page=1;
+    var isMore=true,
+        refresh=true;
+    apiready = function(){
+        categoryID=api.pageParam.categoryID;
+        getList(categoryID);
+    };
+
+
+    function getList(categoryID){
+
+        //判断是否是刷新页面
+        if(refresh){
+            api.showProgress({
+                style: 'default',
+                animationType: 'fade',
+                title: 'Loading...',
+                text: 'Wait a moment...',
+                modal: false
+            });
+        }
+
+        if(isMore){
+
+            api.ajax({
+                url: 'http://192.168.40.20:8090/api/mbgasgoo/get_Product_List/'+categoryID+'/-1/-1/-1/-1/value/'+page,
+                method: 'get',
+            },function(ret, err){
+                if (ret) {
+
+                   var tempEn=doT.template($api.byId('productListTemplate').innerHTML);
+
+
+                    if(page!=1){
+                        //页面追加内容
+                        $api.append($api.byId('productList'), tempEn(ret));
+                    }
+                    else{
+                        //页面绑定新的内容
+                        $api.html($api.byId('productList'), tempEn(ret));
+                    }
+                    page++;
+                    refresh=false;
+                    if(ret.length<10){
+                        //无更多数据
+                        isMore=false;
+                    }
+                    api.hideProgress();
+                    api.refreshHeaderLoadDone();
+                    api.parseTapmode();
+                } else {
+                    api.toast({
+                        msg: 'Error',
+                        duration: 4000,
+                        location: 'bottom'
+                    });
+                }
+            });
+        }
+    }
+
+    function refreshPage() {
+        // 监听页面下拉刷新事件
+        api.setRefreshHeaderInfo({
+            visible: true,
+            loadingImg: 'widget://image/refresh.png',
+            bgColor: '#f0f0f0',
+            textColor: '#888',
+            textDown: 'Pull-down refresh...',
+            textUp: 'Loosen the refresh...',
+            textLoading: 'loading...',
+            showTime: false
+        }, function(ret, err) {
+            page = 1;
+            isMore = true;
+            getList();
+        });
+    }
+
+    //加载更多
+    function loadingMore() {
+        // 监听页面滑动到底部事件
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: 300 //设置距离底部多少距离时触发
+            }
+        }, function(ret, err) {
+            getList();
+        });
+
+    }
+
+     // 缓存图片
+    function loadingImgCache(_this) {
+        var data_url = $api.attr(_this, 'data-url');
+        if (data_url) {
+            api.imageCache({
+                url: data_url,
+                thumbnail: false,
+                policy: 'cache_only'
+            }, function(ret, err) {
+                if (ret) {
+                    _this.src = ret.url;
+                    $api.attr(_this, 'data-url', '');
+                }
+            });
+        }
+    }
+
+    //加载出错时显示自定义图片
+    function onErrorHandle(obj) {
+        obj.src = "../image/error.png";
+    }
+
+    // 跳转详情页
+    function openDetail(productID) {
+
+        api.openWin({
+            name: 'productdetail_'+productID,
+            url: './product_detail.html',
+            pageParam: {
+                productID: productID
+            },
+            animation:{
+                type: "fade"
+            }
+        });
+    }
+</script>
+</html>

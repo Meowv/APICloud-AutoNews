@@ -81,6 +81,10 @@
             line-height: 15px;
             color: #b4b4b4;
         }
+
+        .red {
+            color: #fe7a18;
+        }
     </style>
 </head>
 
@@ -103,7 +107,7 @@
                 </dt> {{?}}
                 <dd>
                     {{=value.Title}}
-                    <p><span style="color:{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
+                    <p><span class="{{=value.TimeColor}}">{{=value.IssueTime}}</span></p>
                 </dd>
             </dl>
         </a>
@@ -138,7 +142,7 @@
         }
         if (isMore) {
             api.ajax({
-                url: 'https://xj8c.cc/api/autonews/get_article_list/' + api.pageParam.classId + "/" + page,
+                url: 'https://api.xj8c.cc/api/autonews/get_article_list/' + api.pageParam.classId + "/" + page,
                 cache: true,
                 method: 'get',
             }, function(ret, err) {
@@ -190,6 +194,9 @@
         }, function(ret, err) {
             page = 1;
             isMore = true;
+            var status = $api.byId('pushStatus');
+            status.innerHTML = "loading...";
+            $api.css($api.byId('loadImg'), 'display:inline-block');
             getList();
         });
     }
